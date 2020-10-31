@@ -9,8 +9,7 @@
 #include "timer.h"
 #include "button.h"
 
-volatile bool is_pressed = true;
-volatile bool print_released = false;
+static volatile unsigned short timer_indexing = 0;
 
 void main (void) {
 	LED_init();
@@ -18,26 +17,41 @@ void main (void) {
 	timer_init();
 	button_init();
 	sei();
+	
+	bool last_state = false;
+	bool current_state = false;
 
 	while(1){
-			if((PIND & (1 << PD2)) && is_pressed == true && print_released ){
-					printf_P(PSTR("Pushed\r\n"));
-					is_pressed = false;
-			}
-			if(print_released){
+		if(timer_indexing > 10){
+			current_state = check_button_state(last_state);
+			timer_indexing = 0;
+		}
 
-				printf_P(PSTR("Released\r\n"));
-				print_released = false;
+		if(current_state != last_state){
+			if(current_state){
+				printf_P(PSTR("Pushed\r\n"));
 			}
+			else{
+				printf_P(PSTR("Released\r\n"));
+			}
+		}
+		last_state = current_state;
 	}
 }
 
-ISR(INT0_vect){
-	is_pressed = true;
-	print_released = true;
+ISR(TIMER0_COMPA_vect){
+	timer_indexing++;
 }
 
 
-/*
 
+/*
+if(print_released){
+	printf_P(PSTR("Released\r\n"));
+	print_released = false;
+}
+if((PIND & (1 << PD2)) && is_pressed == true && print_released ){
+	printf_P(PSTR("Pushed\r\n"));
+	is_pressed = false;
+}
 */
