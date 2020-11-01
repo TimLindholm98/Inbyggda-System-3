@@ -1,5 +1,5 @@
 #include <avr/io.h>
-#include "ADC.h"'
+#include "ADC.h"
 
 void adc_init(){
   ADMUX = 0x00;
