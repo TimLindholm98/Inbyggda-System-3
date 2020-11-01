@@ -6,7 +6,8 @@ SOURCES = \
 		  serial.c \
 		  led.c \
 		  timer.c \
-		  button.c
+		  button.c \
+		  ADC.c
 
 PORT = /dev/ttyACM0# Arduinons serieport — kan vara ttyACM1, kolla dmesg!
 
@@ -53,7 +54,7 @@ $(OBJS): makefile
 
 clean: # Rensa upp byggkatalogen
 	@echo " Cleaning...";
-	rm -f $(OUT) $(OBJS) *.map *.P *.out 
+	rm -f $(OUT) $(OBJS) *.map *.P *.out
 
 screen: # öppna en serie terminal
 	screen $(PORT) 38400
