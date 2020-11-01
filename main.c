@@ -9,39 +9,40 @@
 #include "timer.h"
 #include "button.h"
 
-volatile uint16_t adc_value = 0;
-static volatile bool new_pwm_value = false;
+static volatile unsigned short timer_indexing = 0;
 
 void main (void) {
 	LED_init();
 	uart_init();
-	timer_init0();
-	timer_init2();
-	//button_init();
-	adc_init();
+	timer_init();
+	button_init();
+	sei();
 
 	bool last_state = false;
 	bool current_state = false;
 
-	sei();
 	while(1){
-		if(new_pwm_value){
-			OCR0A = adc_value;
-			new_pwm_value = false;
+		if(timer_indexing > 10){		// every 50 ms / 20 hz we read the state
+			current_state = check_button_state(last_state);
+			timer_indexing = 0;
 		}
+
+		if(current_state != last_state){
+			if(current_state){
+				printf_P(PSTR("Pushed\r\n"));
+			}
+			else{
+				printf_P(PSTR("Released\r\n"));
+			}
+		}
+		last_state = current_state;
 	}
 }
 
-ISR(TIMER2_COMPA_vect){
-	ADCSRA |= (1<<ADSC);
+ISR(TIMER0_COMPA_vect){		// kinda a time multiplier, becuase you cant set the time to 20 hz 50 ms
+	timer_indexing++;
 }
 
-
-
-ISR(ADC_vect){
-	adc_value = ADCH;
-	new_pwm_value = true;
-}
 
 
 /*
