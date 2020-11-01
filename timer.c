@@ -9,7 +9,7 @@ void timer_init0() {
 }
 
 void timer_init2() {
-  OCR2A = 255;
+  //OCR2A = 255;
   TCNT2 = 0;
   TIMSK2 |= (1 << OCIE2A);    //Timer/Counter2, Output Compare A Match Interrupt Enable
   TCCR2A |= (1 << WGM21); // enable ctc mode, Clear OC2A on Compare Match, set OC2A at BOTTOM (non-inverting mode)
