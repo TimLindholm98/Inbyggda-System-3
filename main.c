@@ -62,8 +62,9 @@ ISR(ADC_vect){
 ISR(TIMER0_COMPA_vect){
 	static uint8_t timer_i = 0;
 	timer_i++;
-	if(timer_i > 30){
+	if(timer_i > 5){
 		OCR0A = simple_ramp();
+		timer_i = 0;
 	}
 }
 /*
