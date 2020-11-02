@@ -2,6 +2,6 @@
 #define _BUTTON_H_
 
 void button_init();
-bool check_button_state(bool last_state);
+void check_button_state(SYSTEM_STATE *state);
 
 #endif

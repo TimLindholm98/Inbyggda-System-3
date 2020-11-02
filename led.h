@@ -3,7 +3,9 @@
 
 void LED_init(void);
 
-uint8_t simple_ramp(void);
+int simple_ramp(void);
+
+void toggle_LED(void);
+void toggle_LED_100(SYSTEM_STATE *state);
 
 #endif // _LED_H_
-

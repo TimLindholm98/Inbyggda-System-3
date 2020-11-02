@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <stdbool.h>
+#include "state.h"
 #include "button.h"
 
 
@@ -9,11 +10,25 @@ void button_init(){
   EIMSK |= (1 << INT0);*/
 }
 
-bool check_button_state(bool last_state){
+void check_button_state(SYSTEM_STATE *state){
+  static bool last_button_state;
+  static bool new_button_state;
+
 	if(PIND & (1 << PD2)){
-		return true; // HIGH
+		new_button_state = true; // HIGH
 	}
 	else{
-		return false; // LOW
+		new_button_state = false; // LOW
 	}
+
+  if(new_button_state != last_button_state){
+		if(new_button_state){
+			//printf_P(PSTR("Pushed\r\n"));
+		}
+		else{
+			//printf_P(PSTR("Released\r\n"));
+      state->change_state = true;
+		}
+	}
+  last_button_state = new_button_state;
 }
