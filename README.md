@@ -42,6 +42,10 @@ void main(void) {
     last_state = current_state;
   }
 }
+
+ISR(TIMER0_COMPA_vect) {
+ timer_indexing++;
+}
 ```
 ```c
 //----- button.c -----
